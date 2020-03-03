@@ -1,8 +1,14 @@
-﻿<div class="grid grid-cols-3 grid-rows-3 border-collapse border-2 border-black h-64 w-64">
-    @for (int i = 1; i <= 9; i++)
+﻿@using SudokuSolver.Shared
+
+<div class="grid grid-cols-3 grid-rows-3 border-collapse border-2 border-black h-64 w-64">
+    @foreach (var tile in Tiles)
     {
-        <div class="flex justify-center items-center border border-black">
-            @i
+        <div class="flex justify-center items-center border border-black text-lg @tile.Color">
+            @tile.Value
         </div>
     }
 </div>
+
+@code{
+    [Parameter] public List<TileData> Tiles { get; set; }
+}

@@ -1,10 +1,38 @@
 ﻿@using SudokuSolver.Client.Components
+@using SudokuSolver.Shared
+@using System.Threading
 
-<div class="container mx-auto">
-    <div class="grid grid-cols-3 grid-rows-3">
-        @for (int t = 1; t <= 9; t++)
-        {
-            <SudokuTile />
-        }
+@if (!loaded)
+{
+    <p>Loading data...</p>
+}
+else
+{
+    <div class="flex justify-center">
+        <div class="grid grid-cols-3 grid-rows-3" style="height: calc(3 * 16rem); width: calc(3 * 16rem);">
+            @for (int b = 1; b <= 9; b++)
+            {
+                List<TileData> tiles = new List<TileData>();
+                for (int t = 1; t <= 9; t++)
+                {
+                    tiles.Add(State.CurrentGrid.Find(tile => tile.index == int.Parse($"{b.ToString()}{t.ToString()}")));
+                }
+                <SudokuTile Tiles="tiles" />
+            }
+        </div>
     </div>
-</div>
+}
+
+@code {
+    [CascadingParameter] protected SudokuState State { get; set; }
+    public bool loaded { get; set; } = false;
+
+    protected override void OnInitialized()
+    {
+        State.OnStateChanged += () =>
+        {
+            loaded = true;
+            StateHasChanged();
+        };
+    }
+}

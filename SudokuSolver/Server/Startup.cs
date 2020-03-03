@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using SudokuSolver.Server.Hubs;
 using System.Linq;
 
 namespace SudokuSolver.Server
@@ -13,6 +14,7 @@ namespace SudokuSolver.Server
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddSignalR();
             services.AddMvc();
             services.AddResponseCompression(opts =>
             {
@@ -40,6 +42,7 @@ namespace SudokuSolver.Server
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapDefaultControllerRoute();
+                endpoints.MapHub<SudokuHub>("/SudokuHub");
                 endpoints.MapFallbackToClientSideBlazor<Client.Program>("index.html");
             });
         }

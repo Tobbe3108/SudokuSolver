@@ -1,4 +1,53 @@
 ﻿@page "/"
 @using SudokuSolver.Client.Components
+@using SudokuSolver.Shared
+@using Microsoft.AspNetCore.SignalR.Client
+@inject NavigationManager NavigationManager
 
-<SudokuGrid />
+<CascadingValue Value="state">
+    <SudokuGrid />
+</CascadingValue>
+
+<button @onclick="GenerateGrid" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+    Generate
+</button>
+<button @onclick="SolveSudoku" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+    Solve
+</button>
+
+@code{
+    private SudokuState state;
+
+    protected override void OnInitialized()
+    {
+        state = new SudokuState();
+        state.OnStateChanged += StateHasChanged;
+    }
+
+    #region SignalR
+    private HubConnection _hubConnection;
+    protected override async Task OnInitializedAsync()
+    {
+        _hubConnection = new HubConnectionBuilder()
+            .WithUrl(NavigationManager.ToAbsoluteUri("/SudokuHub"))
+            .WithAutomaticReconnect()
+            .Build();
+
+        await _hubConnection.StartAsync();
+        await GenerateGrid();
+    }
+
+    async Task GenerateGrid()
+    {
+        await _hubConnection.SendAsync("GenerateGrid");
+    }
+
+    async Task SolveSudoku()
+    {
+        await _hubConnection.SendAsync("SolveSudoku");
+    }
+
+    public bool IsConnected =>
+        _hubConnection.State == HubConnectionState.Connected;
+    #endregion
+}
