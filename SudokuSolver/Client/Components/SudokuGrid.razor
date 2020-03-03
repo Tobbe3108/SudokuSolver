@@ -1,3 +1,10 @@
 ﻿@using SudokuSolver.Client.Components
 
-<SudokuTile />
+<div class="container mx-auto">
+    <div class="grid grid-cols-3 grid-rows-3">
+        @for (int t = 1; t <= 9; t++)
+        {
+            <SudokuTile />
+        }
+    </div>
+</div>
