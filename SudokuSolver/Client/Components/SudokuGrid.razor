@@ -8,14 +8,15 @@
 }
 else
 {
-    <div class="flex justify-center">
+    <p class="mt-5 text-center text-3xl">Sudoku Solver</p>
+    <div class="flex justify-center mt-5">
         <div class="grid grid-cols-3 grid-rows-3" style="height: calc(3 * 16rem); width: calc(3 * 16rem);">
             @for (int b = 1; b <= 9; b++)
             {
                 List<TileData> tiles = new List<TileData>();
                 for (int t = 1; t <= 9; t++)
                 {
-                    tiles.Add(State.CurrentGrid.Find(tile => tile.index == int.Parse($"{b.ToString()}{t.ToString()}")));
+                    tiles.Add(State.CurrentGrid.Find(tile => tile.index.SequenceEqual(new int[2] { b, t })));
                 }
                 <SudokuTile Tiles="tiles" />
             }

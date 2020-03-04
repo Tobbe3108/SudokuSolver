@@ -8,6 +8,12 @@ namespace SudokuSolver.Server.Hubs
 {
     public class SudokuHub : Hub
     {
+        private SudokuService _sudokuService { get; set; }
+        public SudokuHub(SudokuService sudokuService)
+        {
+            _sudokuService = sudokuService;
+        }
+
         private async Task UpdateTile(TileData updatedTile)
         {
             await Clients.All.SendAsync("ReceiveUpdatedTile", updatedTile);
@@ -15,24 +21,18 @@ namespace SudokuSolver.Server.Hubs
 
         public async Task GenerateGrid()
         {
-            List<TileData> grid = new List<TileData>();
-            Random random = new Random();
+            await Clients.All.SendAsync("ReceiveNewGrid", _sudokuService.GenerateGridOld());
+        }
 
-            for (int b = 1; b <= 9; b++)
-            {
-                for (int t = 1; t <= 9; t++)
-                {
-                    grid.Add(new TileData() { index = Int32.Parse($"{b.ToString()}{t.ToString()}"), Value = random.Next(1, 10) });
-                }
-            }
-
-            await Clients.All.SendAsync("ReceiveNewGrid", grid);
+        public async Task GenerateGridNew()
+        {
+            await Clients.All.SendAsync("ReceiveNewGrid", _sudokuService.GenerateGrid());
         }
 
         public async Task SolveSudoku()
         {
             Random random = new Random();
-            await UpdateTile(new TileData() { index = Int32.Parse($"{random.Next(1, 10).ToString()}{random.Next(1, 10).ToString()}"), Value = random.Next(1, 10), Color = "bg-blue-100" });
+            await UpdateTile(new TileData() { index = new int[2] { random.Next(1, 10), random.Next(1, 10) }, Value = random.Next(1, 10), Color = "bg-blue-100" });
         }
     }
 }

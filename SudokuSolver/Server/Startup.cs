@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using SudokuSolver.Server.Hubs;
+using SudokuSolver.Shared;
 using System.Linq;
 
 namespace SudokuSolver.Server
@@ -14,6 +15,7 @@ namespace SudokuSolver.Server
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddSingleton<SudokuService, SudokuService>();
             services.AddSignalR();
             services.AddMvc();
             services.AddResponseCompression(opts =>
