@@ -16,11 +16,11 @@ else
                 for (int l = 0; l < 9; l += 3)
                 {
                     List<TileData> tiles = new List<TileData>();
-                    for (int r = 1; r <= 3; r++)
+                    for (int r = 0; r < 3; r++)
                     {
-                        for (int c = 1; c <= 3; c++)
+                        for (int c = 0; c < 3; c++)
                         {
-                            tiles.Add(State.CurrentGrid.Find(tile => tile.index.SequenceEqual(new int[2] { r + i, c + l })));
+                            tiles.Add(State.CurrentGrid.Find(tile => tile.index.SequenceEqual(new int[] { r + i, c + l })));
                         }
                     }
                     <SudokuTile Tiles="tiles" />

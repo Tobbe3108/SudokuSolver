@@ -8,39 +8,9 @@ namespace SudokuSolver.Shared
 {
     public class SudokuService
     {
-        public TileData[,] GenerateGridOld()
+        public List<TileData> GenerateGrid()
         {
-            TileData[,] grid = new TileData[9, 9];
-            for (int r = 0; r < 9; r++)
-            {
-                for (int c = 0; c < 9; c++)
-                {
-                    grid[r, c] = new TileData();
-                }
-            }
-            Random random = new Random();
-
-            for (int b = 1; b <= 9; b++)
-            {
-                for (int t = 1; t <= 9; t++)
-                {
-                    grid[b, t] = new TileData() { Value = random.Next(1, 10) };
-                }
-            }
-
-            return grid;
-        }
-
-        public TileData[,] GenerateGrid()
-        {
-            TileData[,] grid = new TileData[9, 9];
-            for (int r = 0; r < 9; r++)
-            {
-                for (int c = 0; c < 9; c++)
-                {
-                    grid[r, c] = new TileData();
-                }
-            }
+            List<TileData> grid = new List<TileData>();
 
             Random random = new Random();
 
@@ -48,20 +18,20 @@ namespace SudokuSolver.Shared
             {
                 for (int c = 0; c < 9; c++)
                 {
-                    bool generate = false;
+                    bool generate = true;
                     do
                     {
                         int temp = random.Next(1, 10);
 
-                        if (CheckNeighbourhood(grid, r, c, temp))
-                            //    if (CheckVerticalNeighbourhood(grid, cords, temp))
-                            //        if (CheckHorizontalNeighbourhood(grid, cords, temp))
-                            //            generate = true;
+                        //if (CheckNeighbourhood(grid, r, c, temp))
+                        //    if (CheckVerticalNeighbourhood(grid, c, temp))
+                        //        if (CheckHorizontalNeighbourhood(grid, r, temp))
+                        //            generate = true;
 
-                            if (generate)
-                            {
-                                grid[r, c] = new TileData() { Value = temp };
-                            }
+                        if (generate)
+                        {
+                            grid.Add(new TileData() { index = new int[] { r, c }, Value = temp });
+                        }
                     } while (!generate);
                 }
             }
@@ -69,16 +39,16 @@ namespace SudokuSolver.Shared
             return grid;
         }
 
-        private bool CheckNeighbourhood(TileData[,] grid, int r, int c, int temp)
+        private bool CheckNeighbourhood(List<TileData> grid, int r, int c, int temp)
         {
             int rowStart = (r / 3) * 3;
             int colStart = (c / 3) * 3;
 
-            for (int r = rowStart; r < rowStart + 3; r++)
+            for (int row = rowStart; row < rowStart + 3; row++)
             {
-                for (int c = colStart; c < colStart + 3; c++)
+                for (int col = colStart; col < colStart + 3; col++)
                 {
-                    if (grid[r, c].Value == temp)
+                    if (grid.Find(tile => tile.index.SequenceEqual(new int[] { row, col })).Value == temp)
                         return false;
                 }
             }
@@ -86,26 +56,26 @@ namespace SudokuSolver.Shared
             return true;
         }
 
-        //private bool CheckVerticalNeighbourhood(TileData[,] grid, int r, int c, int temp)
-        //{
-        //    for (int i = 1; i <= 9; i++)
-        //    {
-        //        if (grid.Find(tile => tile.index.SequenceEqual(new int[2] { i, cords[1] })).Value == temp)
-        //            return false;
-        //    }
+        private bool CheckVerticalNeighbourhood(List<TileData> grid, int c, int temp)
+        {
+            for (int i = 0; i < 9; i++)
+            {
+                if (grid.Find(tile => tile.index.SequenceEqual(new int[] { i, c })).Value == temp)
+                    return false;
+            }
 
-        //    return true;
-        //}
+            return true;
+        }
 
-        //private bool CheckHorizontalNeighbourhood(TileData[,] grid, int r, int c, int temp)
-        //{
-        //    for (int i = 1; i <= 9; i++)
-        //    {
-        //        if (grid.Find(tile => tile.index.SequenceEqual(new int[2] { cords[0], i })).Value == temp)
-        //            return false;
-        //    }
+        private bool CheckHorizontalNeighbourhood(List<TileData> grid, int r, int temp)
+        {
+            for (int i = 0; i < 9; i++)
+            {
+                if (grid.Find(tile => tile.index.SequenceEqual(new int[] { r, i })).Value == temp)
+                    return false;
+            }
 
-        //    return true;
-        //}
+            return true;
+        }
     }
 }

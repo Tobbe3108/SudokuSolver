@@ -26,9 +26,10 @@ namespace SudokuSolver.Shared
                 OnStateChanged?.Invoke();
             });
 
-            connection.On<List<TileData>>("ReceiveNewGrid", (grid) =>
+            //SignalR cant receive T[,]..
+            connection.On<List<TileData>>("ReceiveNewGrid", (newGrid) =>
             {
-                CurrentGrid = grid;
+                CurrentGrid = newGrid;
                 OnStateChanged?.Invoke();
             });
 
