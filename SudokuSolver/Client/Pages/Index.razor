@@ -9,14 +9,11 @@
 </CascadingValue>
 
 <div class="flex justify-center mt-5">
-    <button @onclick="GenerateGrid" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+    <button @onclick="GenerateGrid" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-5">
         Generate
     </button>
     <button @onclick="GenerateGridNew" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
         Generate New
-    </button>
-    <button @onclick="SolveSudoku" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded ml-5">
-        Solve
     </button>
 </div>
 
@@ -50,11 +47,6 @@
     async Task GenerateGridNew()
     {
         await _hubConnection.SendAsync("GenerateGridNew");
-    }
-
-    async Task SolveSudoku()
-    {
-        await _hubConnection.SendAsync("SolveSudoku");
     }
 
     public bool IsConnected =>

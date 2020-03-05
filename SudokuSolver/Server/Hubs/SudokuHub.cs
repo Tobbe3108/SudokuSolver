@@ -14,11 +14,6 @@ namespace SudokuSolver.Server.Hubs
             _sudokuService = sudokuService;
         }
 
-        private async Task UpdateTile(TileData updatedTile)
-        {
-            await Clients.All.SendAsync("ReceiveUpdatedTile", updatedTile);
-        }
-
         public async Task GenerateGrid()
         {
             await Clients.All.SendAsync("ReceiveNewGrid", _sudokuService.GenerateGridOld());
@@ -27,12 +22,6 @@ namespace SudokuSolver.Server.Hubs
         public async Task GenerateGridNew()
         {
             await Clients.All.SendAsync("ReceiveNewGrid", _sudokuService.GenerateGrid());
-        }
-
-        public async Task SolveSudoku()
-        {
-            Random random = new Random();
-            await UpdateTile(new TileData() { index = new int[2] { random.Next(1, 10), random.Next(1, 10) }, Value = random.Next(1, 10), Color = "bg-blue-100" });
         }
     }
 }
