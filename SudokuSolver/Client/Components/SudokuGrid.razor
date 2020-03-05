@@ -11,14 +11,20 @@ else
     <p class="mt-5 text-center text-3xl">Sudoku Solver</p>
     <div class="flex justify-center mt-5">
         <div class="grid grid-cols-3 grid-rows-3" style="height: calc(3 * 16rem); width: calc(3 * 16rem);">
-            @for (int b = 1; b <= 9; b++)
+            @for (int i = 0; i < 9; i += 3)
             {
-                List<TileData> tiles = new List<TileData>();
-                for (int t = 1; t <= 9; t++)
+                for (int l = 0; l < 9; l += 3)
                 {
-                    tiles.Add(State.CurrentGrid.Find(tile => tile.index.SequenceEqual(new int[2] { b, t })));
+                    List<TileData> tiles = new List<TileData>();
+                    for (int r = 1; r <= 3; r++)
+                    {
+                        for (int c = 1; c <= 3; c++)
+                        {
+                            tiles.Add(State.CurrentGrid.Find(tile => tile.index.SequenceEqual(new int[2] { r + i, c + l })));
+                        }
+                    }
+                    <SudokuTile Tiles="tiles" />
                 }
-                <SudokuTile Tiles="tiles" />
             }
         </div>
     </div>
