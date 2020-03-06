@@ -20,7 +20,12 @@ else
                     {
                         for (int c = 0; c < 3; c++)
                         {
-                            tiles.Add(State.CurrentGrid.Find(tile => tile.index.SequenceEqual(new int[] { r + i, c + l })));
+                            TileData tile = State.CurrentGrid.Find(tile => tile.index.SequenceEqual(new int[] { r + i, c + l }));
+                            if (tile == null)
+                            {
+                                tile = new TileData() { index = new int[2] { r + i, c + l } };
+                            }
+                            tiles.Add(tile);
                         }
                     }
                     <SudokuTile Tiles="tiles" />

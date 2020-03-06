@@ -18,15 +18,15 @@ namespace SudokuSolver.Shared
             {
                 for (int c = 0; c < 9; c++)
                 {
-                    bool generate = true;
+                    bool generate = false;
                     do
                     {
                         int temp = random.Next(1, 10);
 
-                        //if (CheckNeighbourhood(grid, r, c, temp))
-                        //    if (CheckVerticalNeighbourhood(grid, c, temp))
-                        //        if (CheckHorizontalNeighbourhood(grid, r, temp))
-                        //            generate = true;
+                        if (CheckNeighbourhood(grid, r, c, temp))
+                            if (CheckVerticalNeighbourhood(grid, c, temp))
+                                if (CheckHorizontalNeighbourhood(grid, r, temp))
+                                    generate = true;
 
                         if (generate)
                         {
@@ -48,8 +48,10 @@ namespace SudokuSolver.Shared
             {
                 for (int col = colStart; col < colStart + 3; col++)
                 {
-                    if (grid.Find(tile => tile.index.SequenceEqual(new int[] { row, col })).Value == temp)
-                        return false;
+                    TileData tile = grid.Find(tile => tile.index.SequenceEqual(new int[] { row, col }));
+                    if (tile != null)
+                        if (tile.Value == temp)
+                            return false;
                 }
             }
 
@@ -60,8 +62,10 @@ namespace SudokuSolver.Shared
         {
             for (int i = 0; i < 9; i++)
             {
-                if (grid.Find(tile => tile.index.SequenceEqual(new int[] { i, c })).Value == temp)
-                    return false;
+                TileData tile = grid.Find(tile => tile.index.SequenceEqual(new int[] { i, c }));
+                if (tile != null)
+                    if (tile.Value == temp)
+                        return false;
             }
 
             return true;
@@ -71,8 +75,10 @@ namespace SudokuSolver.Shared
         {
             for (int i = 0; i < 9; i++)
             {
-                if (grid.Find(tile => tile.index.SequenceEqual(new int[] { r, i })).Value == temp)
-                    return false;
+                TileData tile = grid.Find(tile => tile.index.SequenceEqual(new int[] { r, i }));
+                if (tile != null)
+                    if (tile.Value == temp)
+                        return false;
             }
 
             return true;
